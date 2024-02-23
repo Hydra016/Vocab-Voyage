@@ -1,71 +1,96 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { 
     Container,
-    SlideFade,
+    useToast,
     Button,
+    SlideFade,
+    Heading,
+    Text,
     Box
 } from '@chakra-ui/react'
 import Typewriter from "typewriter-effect";
-import Image from "next/image";
-import animation from '../../../public/animation'
+import axios from 'axios'
 
-const InitialComponent = () => {
-    const [levelShow, setLevelShow] = useState(false)
-    const [level, setLevel] = useState("")
+import { QuestionContext } from '@/context/QuestionProvider';
 
-    const defaultOptions = {
-        loop: true,
-        autoplay: true,
-        animationData: animation,
-        rendererSettings: {
-          preserveAspectRatio: "xMidYMid slice",
-        },
-      };
+const InitialComponent = ({ gameScreen, showGameScreen }) => {
+  const [introPlayed, setIntroPlayed] = useState(false)
+  const [newGame, setNewGame] = useState(false);
+  const { user, setUser } = useContext(QuestionContext);
+  const toast = useToast();
     
+  useEffect(() => {
+    user && completeOnBoarding()
+  }, [introPlayed])
+
+  useEffect(() => {
+    if(user && user.isOnBoarded) setNewGame(true)
+  }, [user && user.isOnBoarded])
+  
+  const completeOnBoarding = async () => {
+    try {
+      const { data } = await axios.put("api/users/onboarding", {
+        userId: user._id,
+        isOnBoarded: true
+      });
+  
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"))
+      const updatedUserInfo = { ...userInfo, isOnBoarded: true,};
+      localStorage.setItem('userInfo', JSON.stringify(updatedUserInfo));
+      setUser(updatedUserInfo)
+  
+    } catch (error) {
+      console.error("Error completing onboarding:", error);
+      toast({
+        title: "Error Occured!",
+        description: error.response.data.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+    }
+  };
+
+  const setGameScreen = () => {
+    showGameScreen(true);
+    JSON.stringify(sessionStorage.setItem("gameScreen", true))
+  }
 
   return (
-    <Container display="flex" justifyContent="space-between" maxW="100%" mt={50}>
-        <div style={{fontSize: "30px", width: "60%"}}  className="typewriter-container">
-            <Typewriter
+    <Container maxW="100%" height='100%' mt={50} fontSize={30}>
+            {user && !user.isOnBoarded && <Box display="flex" justifyContent="center" alignItems="center" maxW="100%" height='100%'>
+              <Typewriter
               onInit={(typewriter) => {
                 typewriter
                   .changeDelay(25)
-                  .typeString("Bonjour, <br>")
+                  .typeString("Bonjour")
                   .pauseFor(500)
-                  .typeString("welcome to Vocab Voyage<br>")
+                  .deleteChars(10)
                   .pauseFor(500)
-                  .typeString("the perfect place to improve your <br>")
+                  .typeString("welcome to Vocab Voyage")
                   .pauseFor(500)
-                  .typeString("<b>compétences en français</b><br>")
+                  .deleteChars(23)
+                  .typeString("the perfect place to improve your <b>compétences en français</b>")
                   .pauseFor(500)
-                  .typeString("before moving on choose your french level<br>")
+                  .deleteChars(58)
+                  .typeString("best of luck")
+                  .pauseFor(500)
+                  .deleteChars(12)
                   .start()
-                  .callFunction(() => setLevelShow(true));
+                  .callFunction(() => setIntroPlayed(true));
               }}
-            />
-
-            <SlideFade offsetY='20px' in={levelShow}>
-                <Button onClick={() => setLevel("beginner")} mr={5} colorScheme='green' variant="outline" rightIcon={<Image src='/noob.png' width={20} height={20} />}>
-                Beginner
-                </Button>
-                <Button onClick={() => setLevel("intermediate")} mr={5} colorScheme='yellow' variant="outline" rightIcon={<Image src='/mid.png' width={20} height={20} />}>
-                Intermediate
-                </Button>
-                <Button onClick={() => setLevel("professional")} colorScheme='red' variant="outline" rightIcon={<Image src='/pro.png' width={20} height={20} />}>
-                Professional
-                </Button>
-            </SlideFade>
-          </div>
-         <SlideFade w="50%"r offsetY='20px' in={levelShow}>
-         <Box ml={250}>
-          {/* <Lottie
-                    options={defaultOptions}
-                    height="100vh"
-                    width="100%"
-                    // style={{ marginBottom: 15, marginLeft: 0 }}
-                  /> */}
-          </Box>
-         </SlideFade>
+              
+            /></Box>}
+            {newGame && <SlideFade offsetY='20px' in={true}>
+    <Container maxW="100%" display="flex" justifyContent="center">
+       <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" mt={100}>
+       <Heading fontSize={80} mb={10} as="h1">Vocab Voyage <span style={{fontSize:"10px"}}>V1.0</span></Heading>
+       <div><Button onClick={() => setGameScreen()} px={20} py={8} mr={5} fontSize={25} colorScheme="blue">Start Game</Button></div>
+       {/* <Button px={20} py={8} fontSize={25} colorScheme="blue">Continue</Button> */}
+       </Box>
+    </Container>
+    </SlideFade>}
         </Container>
   )
 }

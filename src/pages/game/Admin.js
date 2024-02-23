@@ -19,7 +19,7 @@ import { QuestionContext } from "@/context/QuestionProvider";
 
 const Admin = () => {
   const { picLoading, pic, postDetails } = useImageUploader();
-  const { user, questions, setQuestions } = useContext(QuestionContext);
+  const { user } = useContext(QuestionContext);
   const [loading, setLoading] = useState(false);
   const toast = useToast();
   const [formData, setFormData] = useState({
@@ -36,7 +36,7 @@ const Admin = () => {
     if (user?._id) {
       setFormData((prevData) => ({ ...prevData, userId: user._id }));
     }
-  
+
     if (pic) {
       setFormData((prevData) => ({ ...prevData, pic }));
     }
@@ -45,13 +45,15 @@ const Admin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log(formData)
+    console.log(formData);
     if (
       formData.title === "" ||
       formData.hint === "" ||
       formData.correctAnswer === "" ||
       formData.answers.length !== 4 ||
-      !formData.answers.every((value) => typeof value === "string" && value.trim() !== "")
+      !formData.answers.every(
+        (value) => typeof value === "string" && value.trim() !== ""
+      )
     ) {
       toast({
         title: "Please Fill all the Fields",
@@ -64,10 +66,7 @@ const Admin = () => {
       return;
     }
     try {
-      await axios.post(
-        "/api/questions/create",
-        formData
-      );
+      await axios.post("/api/questions/create", formData);
       toast({
         title: "Question created",
         status: "success",
@@ -97,7 +96,7 @@ const Admin = () => {
 
   return (
     <SlideFade offsetY="20px" in={true}>
-      <Box p={5}>
+      <Box backgroundColor="#FAF9F6" p={5}>
         <Navbar />
 
         <VStack align="start" w="100%" spacing={10} p={10}>
@@ -109,7 +108,7 @@ const Admin = () => {
               spacing={5}
               mb={5}
             >
-              <FormControl>
+              <FormControl isRequired>
                 <FormLabel>Title</FormLabel>
                 <Input
                   onChange={(e) =>
@@ -136,7 +135,7 @@ const Admin = () => {
               mb={5}
             >
               {[0, 1].map((index) => (
-                <FormControl key={index}>
+                <FormControl isRequired key={index}>
                   <FormLabel>{`Option ${index}`}</FormLabel>
                   <Input
                     onChange={(e) => handleAnswerChange(e, index)}
@@ -153,7 +152,7 @@ const Admin = () => {
               mb={5}
             >
               {[2, 3].map((index) => (
-                <FormControl key={index}>
+                <FormControl isRequired key={index}>
                   <FormLabel>{`Option ${index}`}</FormLabel>
                   <Input
                     onChange={(e) => handleAnswerChange(e, index)}
@@ -169,7 +168,7 @@ const Admin = () => {
               spacing={5}
               mb={5}
             >
-              <FormControl>
+              <FormControl isRequired>
                 <FormLabel>Correct Option</FormLabel>
                 <Input
                   onChange={(e) =>
@@ -179,10 +178,10 @@ const Admin = () => {
                     })
                   }
                   type="text"
-                  placeholder="eg. apple"
+                  placeholder="correct option number"
                 />
               </FormControl>
-              <FormControl>
+              <FormControl isRequired>
                 <FormLabel>Hint</FormLabel>
                 <Input
                   onChange={(e) =>

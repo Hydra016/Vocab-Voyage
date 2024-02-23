@@ -15,6 +15,10 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       required: false,
       default: false
+    },
+    isOnBoarded: {
+      type: Boolean,
+      default: false
     }
   },
   { timestaps: true }

@@ -2,16 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import Navbar from "@/components/shared/Navbar";
 import {
   VStack,
-  FormControl,
-  FormLabel,
-  Input,
   Button,
   useToast,
   Heading,
   Box,
-  Stack,
   SlideFade,
-  Select,
   Text,
   Image,
 } from "@chakra-ui/react";
@@ -21,6 +16,7 @@ import { QuestionContext } from "@/context/QuestionProvider";
 const Questions = () => {
   const { user } = useContext(QuestionContext);
   const [questions, setQuestions] = useState([]);
+  const toast = useToast();
 
   useEffect(() => {
     user && fetchQuestions();
@@ -32,9 +28,30 @@ const Questions = () => {
     setQuestions(data);
   };
 
+  const deleteQuestions = async (qId) => {
+    try {
+      const { data } = await axios.delete("/api/questions/deleteQuestion", {
+        data: {
+          userId: user._id,
+          questionId: qId,
+        },
+      });
+      setQuestions(data);
+    } catch (error) {
+      toast({
+        title: "Error Occured!",
+        description: error.response.data.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+    }
+  };
+
   return (
     <SlideFade offsetY="20px" in={true}>
-      <Box p={5}>
+      <Box backgroundColor="#FAF9F6" p={5}>
         <Navbar />
         <VStack align="start" w="100%" spacing={10} p={10}>
           <Heading textAlign="left">Total {questions.length}</Heading>
@@ -68,6 +85,12 @@ const Questions = () => {
                 <Text>
                   <b>Level:</b> {question.level}
                 </Text>
+                <Button
+                  onClick={() => deleteQuestions(question._id)}
+                  colorScheme="red"
+                >
+                  Delete
+                </Button>
               </Box>
             ))
           ) : (

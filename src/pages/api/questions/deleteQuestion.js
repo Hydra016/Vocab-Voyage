@@ -2,8 +2,8 @@ require("../config/DabaseConnection");
 const User = require("../models/User");
 const Question = require("../models/Question");
 
-export default async function getAllQuestions(req, res) {
-  if (req.method === "POST") {  
+export default async function deleteQuestion(req, res) {
+  if (req.method === "DELETE") {  
     try {
       const { userId, questionId } = req.body;
       const user = await User.findById(userId);
@@ -12,7 +12,8 @@ export default async function getAllQuestions(req, res) {
         return;
       }
 
-      const questions = await Question.findByIdAndDelete(questionId);
+      await Question.findByIdAndDelete(questionId);
+      const questions = await Question.find()
 
       res.status(200).json(questions);
     } catch (error) {

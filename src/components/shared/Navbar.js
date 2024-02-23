@@ -23,6 +23,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("userInfo");
+    sessionStorage.removeItem("gameScreen");
     router.push("/");
   };
 
@@ -34,14 +35,15 @@ const Navbar = () => {
       bg="white"
       w="100%"
       p="5px 10px 5px 10px"
+      backgroundColor="#FAF9F6"
     >
-      <Box display="flex" alignItems="center">
+      <Box cursor="pointer" display="flex" alignItems="center">
         <Avatar
           onClick={() => router.push("/game")}
           name="Dan Abrahmov"
           src="/paris.png"
         />
-        <Text ml={3} fontSize="2xl">
+        <Text ml={3} fontSize={{ base: "sm", md: "md" }}>
           Vocab Voyage
         </Text>
       </Box>
@@ -56,7 +58,7 @@ const Navbar = () => {
           />
         </Tooltip>
         <Menu>
-          <MenuButton as={Button} rightIcon={<FaChevronDown />}>
+          <MenuButton as={Button} rightIcon={<FaChevronDown />} fontSize={{ base: "sm", md: "md" }}>
             {user && user.name}
           </MenuButton>
           <MenuList>

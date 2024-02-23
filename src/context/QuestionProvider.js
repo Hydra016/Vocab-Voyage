@@ -6,9 +6,7 @@ export const QuestionContext = createContext();
 
 const QuestionProvider = ({ children }) => {
     const [user, setUser] = useState();
-    const [loggedIn, isLoggedin] = useState(false)
     const [theme, setTheme] = useState('light')
-    const [questions, setQuestions] = useState([]);
     const router = useRouter();
     const pathname = usePathname();
 
@@ -26,7 +24,7 @@ const QuestionProvider = ({ children }) => {
         }
     }, [pathname])
 
-    return <QuestionContext.Provider value={{user, theme, setTheme, isLoggedin, questions, setQuestions}}>{children}</QuestionContext.Provider>
+    return <QuestionContext.Provider value={{user, setUser, theme, setTheme}}>{children}</QuestionContext.Provider>
 }
 
 export default QuestionProvider;

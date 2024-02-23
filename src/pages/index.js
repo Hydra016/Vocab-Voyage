@@ -30,7 +30,7 @@ export default function Home() {
           <Lottie options={defaultOptions} height="100vh" width="100%" />
         </Box>
         <Box
-          background="white"
+          background="FAF9F6"
           display="flex"
           justifyContent="center"
           width="100%"

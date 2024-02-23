@@ -41,6 +41,7 @@ export default async function signup(req, res) {
         username: user.username,
         pic: user.pic,
         token: generateToken(user._id),
+        isOnBoarded: false
       });
     } else {
       res.status(400).json({ error: "Failed to create user" });
