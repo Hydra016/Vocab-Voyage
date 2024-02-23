@@ -29,6 +29,7 @@ const Admin = () => {
     pic: "",
     answers: [],
     correctAnswer: "",
+    hint: "",
   });
 
   useEffect(() => {
@@ -47,8 +48,7 @@ const Admin = () => {
     console.log(formData)
     if (
       formData.title === "" ||
-      formData.pic === "" ||
-      formData.pic === null ||
+      formData.hint === "" ||
       formData.correctAnswer === "" ||
       formData.answers.length !== 4 ||
       !formData.answers.every((value) => typeof value === "string" && value.trim() !== "")
@@ -64,7 +64,7 @@ const Admin = () => {
       return;
     }
     try {
-      const { data } = await axios.post(
+      await axios.post(
         "/api/questions/create",
         formData
       );
@@ -107,6 +107,7 @@ const Admin = () => {
               w="100%"
               direction={["column", "column", "row", "row"]}
               spacing={5}
+              mb={5}
             >
               <FormControl>
                 <FormLabel>Title</FormLabel>
@@ -115,6 +116,7 @@ const Admin = () => {
                     setFormData({ ...formData, title: e.target.value })
                   }
                   type="text"
+                  placeholder={`eg. what is meant by "pomme" in french?`}
                 />
               </FormControl>
               <FormControl id="pic">
@@ -131,6 +133,7 @@ const Admin = () => {
               w="100%"
               direction={["column", "column", "row", "row"]}
               spacing={5}
+              mb={5}
             >
               {[0, 1].map((index) => (
                 <FormControl key={index}>
@@ -138,6 +141,7 @@ const Admin = () => {
                   <Input
                     onChange={(e) => handleAnswerChange(e, index)}
                     type="text"
+                    placeholder={`option ${index}`}
                   />
                 </FormControl>
               ))}
@@ -146,6 +150,7 @@ const Admin = () => {
               w="100%"
               direction={["column", "column", "row", "row"]}
               spacing={5}
+              mb={5}
             >
               {[2, 3].map((index) => (
                 <FormControl key={index}>
@@ -153,6 +158,7 @@ const Admin = () => {
                   <Input
                     onChange={(e) => handleAnswerChange(e, index)}
                     type="text"
+                    placeholder={`option ${index}`}
                   />
                 </FormControl>
               ))}
@@ -161,6 +167,7 @@ const Admin = () => {
               w="100%"
               direction={["column", "column", "row", "row"]}
               spacing={5}
+              mb={5}
             >
               <FormControl>
                 <FormLabel>Correct Option</FormLabel>
@@ -172,10 +179,24 @@ const Admin = () => {
                     })
                   }
                   type="text"
+                  placeholder="eg. apple"
                 />
               </FormControl>
               <FormControl>
-                <FormLabel>Option 4</FormLabel>
+                <FormLabel>Hint</FormLabel>
+                <Input
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      hint: e.target.value,
+                    })
+                  }
+                  type="text"
+                  placeholder="It is a fruit"
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Level</FormLabel>
                 <Select
                   onChange={(e) =>
                     setFormData({ ...formData, level: e.target.value })

@@ -38,31 +38,43 @@ const Questions = () => {
         <Navbar />
         <VStack align="start" w="100%" spacing={10} p={10}>
           <Heading textAlign="left">Total {questions.length}</Heading>
-          {questions.length > 0 &&
+          {questions.length > 0 ? (
             questions.map((question, i) => (
               <Box>
                 <Heading as="h3">Question {i + 1}</Heading>
-                <Image
-                  boxSize="250px"
-                  src={question.pic}
-                  alt={question.correctAnswer}
-                />
+                {question.pic && (
+                  <Image
+                    boxSize="250px"
+                    src={question.pic}
+                    alt={question.correctAnswer}
+                  />
+                )}
                 <Heading as="h4" fontSize="25px">
                   {question.title}
                 </Heading>
                 <Text>
-                  Correct answer:{" "}
+                  <b>Correct answer: </b>
                   {question.answers[parseInt(question.correctAnswer)]}
                 </Text>
-                <Text>Options</Text>
+                <Text as="b">Options</Text>
                 {question.answers.map((option, i) => (
                   <Text>
                     {i + 1}. {option}
                   </Text>
                 ))}
-                <Text>Level: {question.level}</Text>
+                <Text>
+                  <b>Hint:</b> {question.hint}
+                </Text>
+                <Text>
+                  <b>Level:</b> {question.level}
+                </Text>
               </Box>
-            ))}
+            ))
+          ) : (
+            <Box>
+              <Heading>No Questions</Heading>
+            </Box>
+          )}
         </VStack>
       </Box>
     </SlideFade>
