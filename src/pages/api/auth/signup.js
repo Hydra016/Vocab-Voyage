@@ -5,11 +5,7 @@ const bcrypt = require("bcryptjs");
 
 
 export default async function signup(req, res) {
-  if (req.method !== "POST") {
-    res.status(405).json({ error: "Method Not Allowed" });
-    return;
-  }
-
+  if (req.method === "POST") {
   try {
     const { name, username, password, pic } = req.body;
     if (!name || !username || !password) {
@@ -32,6 +28,7 @@ export default async function signup(req, res) {
       username,
       password: newPass,
       pic,
+      isOnBoarded: false
     });
 
     if (user) {
@@ -47,6 +44,8 @@ export default async function signup(req, res) {
       res.status(400).json({ error: "Failed to create user" });
     }
   } catch (error) {
+    console.log(error)
     res.status(500).json({ error: "Internal Server Error" });
+  }
   }
 }
