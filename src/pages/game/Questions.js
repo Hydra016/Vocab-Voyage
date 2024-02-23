@@ -19,12 +19,10 @@ const Questions = () => {
   const toast = useToast();
 
   useEffect(() => {
-    user && fetchQuestions();
-  }, [user]);
+    fetchQuestions();
+  }, []);
   const fetchQuestions = async () => {
-    const { data } = await axios.post("/api/questions/getAllQuestions", {
-      userId: user._id,
-    });
+    const { data } = await axios.get("/api/questions/getAllQuestions");
     setQuestions(data);
   };
 

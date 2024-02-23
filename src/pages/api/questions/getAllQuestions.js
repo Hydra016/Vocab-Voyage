@@ -3,15 +3,8 @@ const User = require("../models/User");
 const Question = require("../models/Question");
 
 export default async function getAllQuestions(req, res) {
-  if (req.method === "POST") {  
+  if (req.method === "GET") {  
     try {
-      const { userId } = req.body;
-      const user = await User.findById(userId);
-      if (!user || !user.isAdmin) {
-        res.status(401).send("You are not authorized as an admin");
-        return;
-      }
-
       const questions = await Question.find();
 
       res.status(200).json(questions);

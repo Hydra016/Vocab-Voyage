@@ -34,8 +34,9 @@ const Navbar = () => {
       alignItems="center"
       bg="white"
       w="100%"
-      p="5px 10px 5px 10px"
-      backgroundColor="#FAF9F6"
+      px={8}
+      py={3}
+      borderRadius="10px"
     >
       <Box cursor="pointer" display="flex" alignItems="center">
         <Avatar

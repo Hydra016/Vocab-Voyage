@@ -19,7 +19,7 @@ const index = () => {
 
   return (
     <SlideFade offsetY='20px' in={true}>
-    <Container backgroundColor="#FAF9F6" overflow="hidden" maxW="100%" height="100vh" p={5}>
+    <Container className="main" backgroundColor="#FAF9F6" overflow="hidden" maxW="100%" height="100vh" p={5}>
         <Navbar />
         {!gameScreen ? <InitialComponent gameScreen={gameScreen} showGameScreen={showGameScreen} /> : <Game /> }
     </Container>
