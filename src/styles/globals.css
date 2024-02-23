@@ -6,7 +6,7 @@
 }
 
 .game-container {
-  background-image: linear-gradient(rgba(173, 216, 230, 0.9), rgba(255, 255, 255, 0.9)), url("./background4.jpg");
+  background-image: linear-gradient(rgba(173, 216, 230, 0.9), rgba(255, 255, 255, 0.9)), url("/background4.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

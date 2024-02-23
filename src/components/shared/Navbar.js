@@ -24,6 +24,7 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("userInfo");
     sessionStorage.removeItem("gameScreen");
+    sessionStorage.removeItem("currentQuestion")
     router.push("/");
   };
 
