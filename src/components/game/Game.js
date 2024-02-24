@@ -10,8 +10,10 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { QuestionContext } from "@/context/QuestionProvider";
-import { FaLightbulb } from "react-icons/fa";
+import Question from "./Question";
 import { IoIosHeart } from "react-icons/io";
+import WinningScreen from "./WinningScreen";
+import LoosingScreen from "./LoosingScreen";
 
 const Game = () => {
   const { user } = useContext(QuestionContext);
@@ -20,6 +22,7 @@ const Game = () => {
   const toast = useToast();
   const [lives, setLives] = useState(5);
   const [showHint, setShowHint] = useState(false);
+  const [winningScreen, setWinningScreen] = useState(false);
 
   useEffect(() => {
     fetchQuestions();
@@ -29,7 +32,16 @@ const Game = () => {
 
   useEffect(() => {
     JSON.stringify(sessionStorage.setItem("currentQuestion", questionIndex))
-  }, [questionIndex])
+  }, [questionIndex]);
+
+  useEffect(() => {
+    if (questions.length > 0) {
+      if (questionIndex >= questions.length - 1) {
+        console.log(questionIndex, questions.length);
+        setWinningScreen(true);
+      }
+    }
+  }, [questionIndex, questions.length]);
 
   const fetchQuestions = async () => {
     try {
@@ -54,75 +66,58 @@ const Game = () => {
   }, [showHint]);
 
   const checkAnswer = (index, correct) => {
-    console.log(index, correct);
     if (index === parseInt(correct)) {
       setQuestionIndex(questionIndex + 1);
-    } 
-    if(index !== parseInt(correct)) {
-        setLives(lives - 1)
+    }
+    if (index !== parseInt(correct)) {
+      setLives(lives - 1);
+      toast({
+        title: "try again",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
     }
   };
 
   return (
     <SlideFade offsetY="20px" in={true}>
-      {questions.length > 0 && (
-        <Box
-          px={100}
-          py={10}
-          className="game-container"
-          width="100%"
-          height="100vh"
-          backgroundColor="#FAF9F6"
-        >
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Heading mt={50}>Question {questionIndex + 1}</Heading>
-            <Box display="flex">
-              {Array.from({ length: lives }, (_, index) => (
-                <IoIosHeart size={25} key={index} fill="red" />
-              ))}
-            </Box>
-          </Box>
-          <Box display="flex" justifyContent="center" mt={100}>
-            <Box>
-              <Heading fontSize={{ base: 30, md: 40 }} className="capitalize">
-                {questions[questionIndex].title}
-              </Heading>
-              <Grid
-                templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
-                gap={4}
-                mt={4}
-              >
-                {questions[questionIndex].answers.map((option, index) => (
-                  <Button
-                    fontSize={{ base: 20, md: 25 }}
-                    p={10}
-                    className="capitalize"
-                    onClick={() =>
-                      checkAnswer(index, questions[questionIndex].correctAnswer)
-                    }
-                    key={index}
-                    w="100%"
-                  >
-                    {option}
-                  </Button>
+      <Box
+        px={100}
+        py={10}
+        className={`game-container ${lives === 0 ? "lost" : "normal"}`}
+        width="100%"
+        height="100vh"
+        backgroundColor="#FAF9F6"
+      >
+        {questionIndex < questions.length && lives > 0 ? (
+          <React.Fragment>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Heading mt={50}>Question {questionIndex + 1}</Heading>
+              <Box display="flex">
+                {Array.from({ length: lives }, (_, index) => (
+                  <IoIosHeart size={25} key={index} fill="red" />
                 ))}
-              </Grid>
-              <Button
-                onClick={() => setShowHint(true)}
-                colorScheme="yellow"
-                mt={5}
-                rightIcon={<FaLightbulb />}
-              >
-                Hint
-              </Button>
+              </Box>
             </Box>
-          </Box>
-        </Box>
-      )}
+            <Question
+              questions={questions}
+              checkAnswer={checkAnswer}
+              questionIndex={questionIndex}
+              setShowHint={setShowHint}
+            />
+          </React.Fragment>
+        ) : winningScreen ? (
+          <WinningScreen setQuestionIndex={setQuestionIndex} />
+        ) : (
+          <LoosingScreen setLives={setLives} setQuestionIndex={setQuestionIndex} />
+        )}
+      </Box>
     </SlideFade>
   );
 };

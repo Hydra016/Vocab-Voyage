@@ -6,12 +6,19 @@
 }
 
 .game-container {
-  background-image: linear-gradient(rgba(173, 216, 230, 0.9), rgba(255, 255, 255, 0.9)), url("/background4.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 10px;
   box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+}
+
+.normal {
+  background-image: linear-gradient(rgba(173, 216, 230, 0.9), rgba(255, 255, 255, 0.9)), url("/background4.jpg");
+}
+
+.lost {
+  background-image: linear-gradient(rgba(255, 182, 193, 0.9), rgba(255, 255, 255, 0.9)), url("/background4.jpg");
 }
 
 .main {
