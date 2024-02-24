@@ -6,14 +6,15 @@ import { FaLightbulb } from "react-icons/fa";
 const Question = ({ questions, questionIndex, checkAnswer, setShowHint }) => {
   return (
     <SlideFade offsetY="20px" in={true}>
-      <Box display="flex" justifyContent="center" mt={100}>
+      <Box display="flex" justifyContent="center">
         <Box>
           <Box display="flex" justifyContent="center">
             {questions[questionIndex].pic && (
               <Image
-                boxSize="250px"
+                boxSize={{ base: 200,md: 250  }}
                 objectFit="cover"
                 borderRadius="10px"
+                mb={5}
                 src={questions[questionIndex].pic}
                 alt={
                   questions[questionIndex].answers[
@@ -23,7 +24,7 @@ const Question = ({ questions, questionIndex, checkAnswer, setShowHint }) => {
               />
             )}
           </Box>
-          <Heading fontSize={{ base: 30, md: 40 }} className="capitalize">
+          <Heading fontSize={{ base: 25, md: 40 }} className="capitalize">
             {questions[questionIndex].title}
           </Heading>
           <Grid
