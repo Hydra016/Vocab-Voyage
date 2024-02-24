@@ -153,7 +153,7 @@ const Signup = () => {
         width="100%"
         style={{ marginTop: 15 }}
         onClick={submitHandler}
-        isLoading={picLoading}
+        isLoading={picLoading || loading}
         s
       >
         Sign Up
