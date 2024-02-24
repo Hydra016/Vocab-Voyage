@@ -177,7 +177,7 @@ const Admin = () => {
                       correctAnswer: e.target.value,
                     })
                   }
-                  type="text"
+                  type="number"
                   placeholder="correct option number"
                 />
               </FormControl>

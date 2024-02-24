@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { SlideFade, useToast, Heading, Box } from "@chakra-ui/react";
+import { SlideFade, useToast, Heading, Box, Text } from "@chakra-ui/react";
 import axios from "axios";
 import Question from "./Question";
 import { IoIosHeart } from "react-icons/io";
@@ -16,6 +16,7 @@ const Game = () => {
   });
   const [showHint, setShowHint] = useState(false);
   const [winningScreen, setWinningScreen] = useState(false);
+  const [level, setLevel] = useState("beginner");
 
   useEffect(() => {
     fetchQuestions();
@@ -33,11 +34,10 @@ const Game = () => {
   }, [questionIndex, lives]);
 
   useEffect(() => {
-    if (questions.length > 0) {
-      if (questionIndex >= questions.length - 1) {
+      if (questions.length > 0 && questionIndex >= questions.length - 1) {
         setWinningScreen(true);
+        // setLevel(questions[questionIndex].level)
       }
-    }
   }, [questionIndex, questions.length]);
 
   const fetchQuestions = async () => {
@@ -46,7 +46,13 @@ const Game = () => {
       data.sort((a, b) => a.level.localeCompare(b.level));
       setQuestions(data);
     } catch (error) {
-      console.error("Error fetching questions:", error);
+      toast({
+        title: "error occured",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
     }
   };
 
@@ -106,9 +112,12 @@ const Game = () => {
             alignItems="center"
             mb={10}
           >
+            <Box>
             <Heading fontSize={{ base: 25, md: 40 }}>
               Question {questionIndex + 1}
             </Heading>
+            <Text fontSize={{ base: 15, md: 20 }} className="capitalize">Difficulty: {questions[questionIndex].level}</Text>
+            </Box>
             <Box display="flex">
               {Array.from({ length: lives }, (_, index) => (
                 <IoIosHeart size={25} key={index} fill="red" />
