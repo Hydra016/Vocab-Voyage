@@ -85,9 +85,9 @@ const InitialComponent = ({ gameScreen, showGameScreen }) => {
             {newGame && <SlideFade offsetY='20px' in={true}>
     <Container maxW="100%" display="flex" justifyContent="center">
        <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" mt={100}>
-       <Heading fontSize={80} mb={10} as="h1">Vocab Voyage <span style={{fontSize:"10px"}}>V1.0</span></Heading>
-       <div><Button onClick={() => setGameScreen()} px={20} py={8} mr={5} fontSize={25} colorScheme="blue">Start Game</Button></div>
-       {/* <Button px={20} py={8} fontSize={25} colorScheme="blue">Continue</Button> */}
+       <Heading fontSize={{ base: 40 }} mb={10} as="h1">Vocab Voyage <span style={{fontSize:"10px"}}>V1.0</span></Heading>
+       <Box><Button onClick={() => setGameScreen()} px={20} py={8} mr={5} fontSize={25} colorScheme="blue">Single Player</Button></Box>
+       {/* <div><Button onClick={() => setGameScreen()} px={20} py={8} mr={5} fontSize={25} colorScheme="blue">MultiPlayer</Button></div> */}
        </Box>
     </Container>
     </SlideFade>}
