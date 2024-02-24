@@ -4,7 +4,7 @@ import Lottie from "react-lottie";
 import animation from "../../../public/winning";
 import { LiaRedoAltSolid } from "react-icons/lia";
 
-const WinningScreen = ({ setQuestionIndex }) => {
+const WinningScreen = ({ setQuestionIndex, setLives }) => {
   const defaultOptions = {
     loop: false,
     autoplay: true,
@@ -22,7 +22,10 @@ const WinningScreen = ({ setQuestionIndex }) => {
             You Won!
           </Heading>
           <Box align="center" justify="center">
-            <Button rightIcon={<LiaRedoAltSolid size={25} />} onClick={() => setQuestionIndex(0)}>Play again</Button>
+          <Button rightIcon={<LiaRedoAltSolid size={25} />} onClick={() => {
+                setLives(5)
+                setQuestionIndex(0)
+            }}>Play again</Button>
           </Box>
           <Box mt={10}>
             <Lottie options={defaultOptions} height="50vh" width="100%" />

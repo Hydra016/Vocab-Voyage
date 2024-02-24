@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  SlideFade,
-  useToast,
-  Heading,
-  Box,
-} from "@chakra-ui/react";
+import { SlideFade, useToast, Heading, Box } from "@chakra-ui/react";
 import axios from "axios";
 import Question from "./Question";
 import { IoIosHeart } from "react-icons/io";
@@ -15,24 +10,31 @@ const Game = () => {
   const [questions, setQuestions] = useState([]);
   const [questionIndex, setQuestionIndex] = useState(0);
   const toast = useToast();
-  const [lives, setLives] = useState(5);
+  const [lives, setLives] = useState(() => {
+    const storedLives = JSON.parse(sessionStorage.getItem("currentLives"));
+    return storedLives !== null ? storedLives : 5;
+  });
   const [showHint, setShowHint] = useState(false);
   const [winningScreen, setWinningScreen] = useState(false);
 
   useEffect(() => {
     fetchQuestions();
-    const currentQuestion = JSON.parse(sessionStorage.getItem("currentQuestion"))
-    currentQuestion && setQuestionIndex(currentQuestion)
+    const currentQuestion = JSON.parse(
+      sessionStorage.getItem("currentQuestion")
+    );
+    const currentLives = JSON.parse(sessionStorage.getItem("currentLives"));
+    currentQuestion && setQuestionIndex(currentQuestion);
+    currentLives && setLives(currentLives);
   }, []);
 
   useEffect(() => {
-    JSON.stringify(sessionStorage.setItem("currentQuestion", questionIndex))
-  }, [questionIndex]);
+    JSON.stringify(sessionStorage.setItem("currentQuestion", questionIndex));
+    JSON.stringify(sessionStorage.setItem("currentLives", lives));
+  }, [questionIndex, lives]);
 
   useEffect(() => {
     if (questions.length > 0) {
       if (questionIndex >= questions.length - 1) {
-        console.log(questionIndex, questions.length);
         setWinningScreen(true);
       }
     }
@@ -87,7 +89,12 @@ const Game = () => {
     }
 
     if (questions.length > 0 && questionIndex === questions.length) {
-      return <WinningScreen setQuestionIndex={setQuestionIndex} />;
+      return (
+        <WinningScreen
+          setQuestionIndex={setQuestionIndex}
+          setLives={setLives}
+        />
+      );
     }
 
     if (questions.length > 0 && lives !== 0) {
