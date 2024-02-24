@@ -18,14 +18,25 @@ const WinningScreen = ({ setQuestionIndex, setLives }) => {
     <SlideFade offsetY="20px" in={true}>
       <Flex align="center" justify="center" height="80vh">
         <Box maxWidth="80%">
-          <Heading fontSize={80} align="center" justify="center" color="white">
+          <Heading
+            fontSize={{ base: 50, md: 80 }}
+            align="center"
+            justify="center"
+            color="white"
+            mb={5}
+          >
             You Won!
           </Heading>
           <Box align="center" justify="center">
-          <Button rightIcon={<LiaRedoAltSolid size={25} />} onClick={() => {
-                setLives(5)
-                setQuestionIndex(0)
-            }}>Play again</Button>
+            <Button
+              rightIcon={<LiaRedoAltSolid size={25} />}
+              onClick={() => {
+                setLives(5);
+                setQuestionIndex(0);
+              }}
+            >
+              Play again
+            </Button>
           </Box>
           <Box mt={10}>
             <Lottie options={defaultOptions} height="50vh" width="100%" />

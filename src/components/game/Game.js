@@ -106,7 +106,9 @@ const Game = () => {
             alignItems="center"
             mb={10}
           >
-            <Heading fontSize={{ base: 25 , md: 40 }}>Question {questionIndex + 1}</Heading>
+            <Heading fontSize={{ base: 25, md: 40 }}>
+              Question {questionIndex + 1}
+            </Heading>
             <Box display="flex">
               {Array.from({ length: lives }, (_, index) => (
                 <IoIosHeart size={25} key={index} fill="red" />

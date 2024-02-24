@@ -16,15 +16,18 @@ import { useContext } from "react";
 import { QuestionContext } from "@/context/QuestionProvider";
 import ProfileModal from "./Profile";
 import { useRouter } from "next/router";
+import { FiMenu } from "react-icons/fi";
+import { useMobileDetection } from "@/hooks/useMobileDetection";
 
 const Navbar = () => {
   const { user } = useContext(QuestionContext);
+  const isMobile = useMobileDetection();
   const router = useRouter();
 
   const handleLogout = () => {
     localStorage.removeItem("userInfo");
     sessionStorage.removeItem("gameScreen");
-    sessionStorage.removeItem("currentQuestion")
+    sessionStorage.removeItem("currentQuestion");
     router.push("/");
   };
 
@@ -35,9 +38,10 @@ const Navbar = () => {
       alignItems="center"
       bg="white"
       w="100%"
-      px={8}
-      py={3}
+      px={{ base: 0, md: 8 }}
+      py={{ base: 0, md: 3 }}
       borderRadius="10px"
+      mb={{ base: 5, md: 0 }}
     >
       <Box cursor="pointer" display="flex" alignItems="center">
         <Avatar
@@ -49,7 +53,7 @@ const Navbar = () => {
           Vocab Voyage
         </Text>
       </Box>
-      <div>
+      <Box display="flex" alignItems="center">
         <Tooltip label={user && user.name} hasArrow placement="bottom-end">
           <Avatar
             cursor="pointer"
@@ -57,11 +61,21 @@ const Navbar = () => {
             src={user && user.pic}
             mr={3}
             ml={3}
+            display={{ base: "none", md: "block" }}
           />
         </Tooltip>
         <Menu>
-          <MenuButton as={Button} rightIcon={<FaChevronDown />} fontSize={{ base: "sm", md: "md" }}>
-            {user && user.name}
+          <MenuButton
+            as={Button}
+            rightIcon={isMobile ? null : <FaChevronDown />}
+          >
+            {isMobile ? (
+              <FiMenu />
+            ) : (
+              user && (
+                <Text fontSize={{ base: "sm", md: "md" }}>{user.name}</Text>
+              )
+            )}
           </MenuButton>
           <MenuList>
             {user && user.isAdmin && (
@@ -85,7 +99,7 @@ const Navbar = () => {
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </MenuList>
         </Menu>
-      </div>
+      </Box>
     </Box>
   );
 };

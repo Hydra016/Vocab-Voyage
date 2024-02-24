@@ -18,7 +18,7 @@ const LoosingScreen = ({ setQuestionIndex, setLives }) => {
     <SlideFade offsetY="20px" in={true}>
       <Flex align="center" justify="center" height="80vh">
         <Box maxWidth="80%">
-          <Heading fontSize={80} align="center" justify="center" color="white">
+          <Heading fontSize={{ base: 50,md:80  }} align="center" justify="center" color="white" mb={5}>
             You Lost!
           </Heading>
           <Box align="center" justify="center">

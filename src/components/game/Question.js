@@ -8,10 +8,14 @@ const Question = ({ questions, questionIndex, checkAnswer, setShowHint }) => {
     <SlideFade offsetY="20px" in={true}>
       <Box display="flex" justifyContent="center">
         <Box>
-          <Box display="flex" justifyContent="center">
+          <Box
+            mt={!questions[questionIndex].pic && { base: 10, md: 150 }}
+            display="flex"
+            justifyContent="center"
+          >
             {questions[questionIndex].pic && (
               <Image
-                boxSize={{ base: 200,md: 250  }}
+                boxSize={{ base: 200, md: 250 }}
                 objectFit="cover"
                 borderRadius="10px"
                 mb={5}
