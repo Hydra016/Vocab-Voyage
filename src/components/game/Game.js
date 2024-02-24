@@ -1,12 +1,9 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SlideFade,
   useToast,
   Heading,
-  Stack,
   Box,
-  Button,
-  Grid,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { QuestionContext } from "@/context/QuestionProvider";
@@ -16,7 +13,6 @@ import WinningScreen from "./WinningScreen";
 import LoosingScreen from "./LoosingScreen";
 
 const Game = () => {
-  const { user } = useContext(QuestionContext);
   const [questions, setQuestions] = useState([]);
   const [questionIndex, setQuestionIndex] = useState(0);
   const toast = useToast();
@@ -81,6 +77,46 @@ const Game = () => {
     }
   };
 
+  const renderScreens = () => {
+    if (lives === 0) {
+      return (
+        <LoosingScreen
+          setLives={setLives}
+          setQuestionIndex={setQuestionIndex}
+        />
+      );
+    }
+
+    if (questions.length > 0 && questionIndex === questions.length) {
+      return <WinningScreen setQuestionIndex={setQuestionIndex} />;
+    }
+
+    if (questions.length > 0 && lives !== 0) {
+      return (
+        <React.Fragment>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Heading mt={50}>Question {questionIndex + 1}</Heading>
+            <Box display="flex">
+              {Array.from({ length: lives }, (_, index) => (
+                <IoIosHeart size={25} key={index} fill="red" />
+              ))}
+            </Box>
+          </Box>
+          <Question
+            questions={questions}
+            checkAnswer={checkAnswer}
+            questionIndex={questionIndex}
+            setShowHint={setShowHint}
+          />
+        </React.Fragment>
+      );
+    }
+  };
+
   return (
     <SlideFade offsetY="20px" in={true}>
       <Box
@@ -91,32 +127,7 @@ const Game = () => {
         height="100vh"
         backgroundColor="#FAF9F6"
       >
-        {questionIndex < questions.length && lives > 0 ? (
-          <React.Fragment>
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Heading mt={50}>Question {questionIndex + 1}</Heading>
-              <Box display="flex">
-                {Array.from({ length: lives }, (_, index) => (
-                  <IoIosHeart size={25} key={index} fill="red" />
-                ))}
-              </Box>
-            </Box>
-            <Question
-              questions={questions}
-              checkAnswer={checkAnswer}
-              questionIndex={questionIndex}
-              setShowHint={setShowHint}
-            />
-          </React.Fragment>
-        ) : winningScreen ? (
-          <WinningScreen setQuestionIndex={setQuestionIndex} />
-        ) : (
-          <LoosingScreen setLives={setLives} setQuestionIndex={setQuestionIndex} />
-        )}
+        {renderScreens()}
       </Box>
     </SlideFade>
   );
