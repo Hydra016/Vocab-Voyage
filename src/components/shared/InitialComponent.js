@@ -5,7 +5,6 @@ import {
   Button,
   SlideFade,
   Heading,
-  Text,
   Box,
 } from "@chakra-ui/react";
 import Typewriter from "typewriter-effect";
@@ -116,7 +115,6 @@ const InitialComponent = ({ gameScreen, showGameScreen }) => {
                   Single Player
                 </Button>
               </Box>
-              {/* <div><Button onClick={() => setGameScreen()} px={20} py={8} mr={5} fontSize={25} colorScheme="blue">MultiPlayer</Button></div> */}
             </Box>
           </Container>
         </SlideFade>

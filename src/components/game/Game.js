@@ -34,10 +34,23 @@ const Game = () => {
   }, [questionIndex, lives]);
 
   useEffect(() => {
-      if (questions.length > 0 && questionIndex >= questions.length - 1) {
-        setWinningScreen(true);
-        // setLevel(questions[questionIndex].level)
+    if (questions.length > 0 && questionIndex >= questions.length - 1) {
+      setWinningScreen(true);
+    }
+  }, [questionIndex, questions.length]);
+
+  useEffect(() => {
+    if (questions.length > 0) {
+      if (questionIndex < questions.length - 1) {
+        const currentQuestion = questions[questionIndex];
+        const questionLevel = currentQuestion
+          ? currentQuestion.level
+          : "beginner";
+        setLevel(questionLevel);
+      } else if (questionIndex === questions.length - 1) {
+        setLevel("professional");
       }
+    }
   }, [questionIndex, questions.length]);
 
   const fetchQuestions = async () => {
@@ -113,10 +126,12 @@ const Game = () => {
             mb={10}
           >
             <Box>
-            <Heading fontSize={{ base: 25, md: 40 }}>
-              Question {questionIndex + 1}
-            </Heading>
-            <Text fontSize={{ base: 15, md: 20 }} className="capitalize">Difficulty: {questions[questionIndex].level}</Text>
+              <Heading fontSize={{ base: 25, md: 40 }}>
+                Question {questionIndex + 1}
+              </Heading>
+              <Text fontSize={{ base: 15, md: 20 }} className="capitalize">
+                Difficulty: {questions[questionIndex].level}
+              </Text>
             </Box>
             <Box display="flex">
               {Array.from({ length: lives }, (_, index) => (
