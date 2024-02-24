@@ -11,6 +11,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import useImageUploader from "@/hooks/useImageUploader";
+import { useRouter } from "next/router";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -21,6 +22,7 @@ const Signup = () => {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
   const { picLoading, pic, postDetails } = useImageUploader();
+  const router = useRouter();
 
   const handleClick = () => {
     setShow(!show);
@@ -68,7 +70,6 @@ const Signup = () => {
         },
         config
       );
-      console.log(data);
       toast({
         title: "Registration Successful",
         status: "success",
@@ -78,10 +79,10 @@ const Signup = () => {
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
+      router.push("/game");
     } catch (error) {
       toast({
-        title: "Error Occured!",
-        description: error.response.data.message,
+        title: error.response.data.error,
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -152,7 +153,8 @@ const Signup = () => {
         width="100%"
         style={{ marginTop: 15 }}
         onClick={submitHandler}
-        isLoading={picLoading}s
+        isLoading={picLoading}
+        s
       >
         Sign Up
       </Button>

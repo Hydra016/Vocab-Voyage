@@ -6,7 +6,6 @@ import {
   Box,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { QuestionContext } from "@/context/QuestionProvider";
 import Question from "./Question";
 import { IoIosHeart } from "react-icons/io";
 import WinningScreen from "./WinningScreen";
