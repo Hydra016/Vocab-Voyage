@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { SlideFade, useToast, Heading, Box, Text } from "@chakra-ui/react";
+import {
+  SlideFade,
+  useToast,
+  Heading,
+  Box,
+  Text,
+  Spinner,
+} from "@chakra-ui/react";
 import axios from "axios";
 import Question from "./Question";
 import { IoIosHeart } from "react-icons/io";
@@ -23,6 +30,7 @@ const Game = () => {
   const [intermediateLevel, setIntermediateLevel] = useState(false);
   const [professionalLevel, setProfessionalLevel] = useState(false);
   const isMobile = useMobileDetection();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (winningScreen && questionIndex === questions.length) {
@@ -112,10 +120,13 @@ const Game = () => {
 
   const fetchQuestions = async () => {
     try {
+      setLoading(true);
       const { data } = await axios.get("/api/questions/getAllQuestions");
       data.sort((a, b) => a.level.localeCompare(b.level));
       setQuestions(data);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       toast({
         title: "error occured",
         status: "error",
@@ -243,7 +254,24 @@ const Game = () => {
         height="100vh"
         backgroundColor="#FAF9F6"
       >
-        {renderScreens()}
+        {!loading ? (
+          renderScreens()
+        ) : (
+          <Box
+            display="flex"
+            height="80%"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.200"
+              color="blue.500"
+              size="xl"
+            />
+          </Box>
+        )}
       </Box>
     </SlideFade>
   );

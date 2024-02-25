@@ -2,7 +2,6 @@ import React from "react";
 import { SlideFade, Box, Flex, Heading, Button, Text } from "@chakra-ui/react";
 import Lottie from "react-lottie";
 import animation from "../../../public/intermediate";
-import { LiaRedoAltSolid } from "react-icons/lia";
 
 const LoosingScreen = ({
   showLevelUpScreen,
@@ -18,11 +17,7 @@ const LoosingScreen = ({
       preserveAspectRatio: "xMidYMid slice",
     },
   };
-  sessionStorage.setItem(
-    "intermediateLevelShown",
-    JSON.stringify(intermediateLevel)
-  );
-
+  
   return (
     <SlideFade offsetY="20px" in={true}>
       <Box>
