@@ -40,31 +40,14 @@
   text-transform: capitalize;
 }
 
-.levelup-text-container {
-  
-  animation: levelupAnimation 1s ease-in-out;
-}
-
 .levelup-container {
   display: flex;
   justify-content: center;
-  align-items:center ;
-position: absolute;
+  align-items: center;
+  position: absolute;
   z-index: 10;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
-}
-
-@keyframes levelupAnimation {
-  0% {
-    opacity: 0; /* Initial position, above the screen */
-  }
-  50% {
-    opacity: 0.5; /* Middle position, 5px below the center */
-  }
-  100% {
-    opacity: 1; /* Final position, back to the center */
-  }
 }
