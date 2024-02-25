@@ -23,7 +23,7 @@ const Question = ({ questions, questionIndex, checkAnswer, setShowHint }) => {
           >
             {questions[questionIndex].pic && (
               <Image
-                boxSize={{ base: 100, md: 250 }}
+                boxSize={{ base: 100, md: 200 }}
                 objectFit="cover"
                 borderRadius="10px"
                 mb={5}
@@ -36,7 +36,7 @@ const Question = ({ questions, questionIndex, checkAnswer, setShowHint }) => {
               />
             )}
           </Box>
-          <Heading fontSize={{ base: 20, md: 40 }} className="capitalize">
+          <Heading fontSize={{ base: 20, md: 35 }} className="capitalize">
             {questions[questionIndex].title}
           </Heading>
           <Grid
@@ -46,8 +46,8 @@ const Question = ({ questions, questionIndex, checkAnswer, setShowHint }) => {
           >
             {questions[questionIndex].answers.map((option, index) => (
               <Button
-                fontSize={{ base: 15, md: 25 }}
-                p={{ base: 0, md: 10 }}
+                fontSize={{ base: 15, md: 20 }}
+                p={{ base: 0, md: 7 }}
                 className="capitalize"
                 onClick={() =>
                   checkAnswer(index, questions[questionIndex].correctAnswer)
