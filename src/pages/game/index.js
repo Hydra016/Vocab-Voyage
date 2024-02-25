@@ -16,7 +16,6 @@ const index = () => {
     <SlideFade offsetY="20px" in={true}>
       <Container
         className="main"
-        backgroundColor="#FAF9F6"
         overflow="hidden"
         maxW="100%"
         height="100vh"

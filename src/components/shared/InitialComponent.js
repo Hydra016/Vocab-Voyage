@@ -58,17 +58,11 @@ const InitialComponent = ({ gameScreen, showGameScreen }) => {
   return (
     <Container maxW="100%" height="100%" mt={50} fontSize={30}>
       {user && !user.isOnBoarded && (
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          maxW="100%"
-          height="100%"
-        >
+        <Box display="flex" justifyContent="center" maxW="100%" height="100%">
           <Typewriter
             onInit={(typewriter) => {
               typewriter
-                .changeDelay(25)
+                .changeDelay(13)
                 .typeString("Bonjour")
                 .pauseFor(500)
                 .deleteChars(10)
