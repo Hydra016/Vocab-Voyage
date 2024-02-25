@@ -29,13 +29,22 @@ const ProfileModal = ({ user, children }) => {
       ) : (
         <IconButton display="flex" icon={<FaEye />} onClick={onOpen} />
       )}
-      <Modal size="lg" isOpen={isOpen} onClose={onClose} isCentered>
+      <Modal
+        size={{ base: "xs", md: "lg" }}
+        isOpen={isOpen}
+        onClose={onClose}
+        isCentered
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Profile</ModalHeader>
           <ModalCloseButton />
-          <Box p={5} display="flex" alignItems="center">
-            <Avatar size="xl" name={user.name} src={user.pic}>
+          <Box p={{ base: 2, md: 5 }} display="flex" alignItems="center">
+            <Avatar
+              size={{ base: "lg", md: "xl" }}
+              name={user.name}
+              src={user.pic}
+            >
               <AvatarBadge boxSize="0.8em" bg="green.500" />
             </Avatar>
             <VStack
@@ -44,19 +53,23 @@ const ProfileModal = ({ user, children }) => {
               align="stretch"
               ml={5}
             >
-              <Box h="40px">
-                <Text fontSize={25}>{user.name}</Text>
+              <Box h={{ base: "15px", md: "40px" }}>
+                <Text fontSize={{ base: 15, md: 25 }}>{user.name}</Text>
               </Box>
-              <Box h="40px">
-                <Text fontSize={25}>{user.username}</Text>
+              <Box h={{ base: "15px", md: "40px" }}>
+                <Text fontSize={{ base: 15, md: 25 }}>{user.username}</Text>
               </Box>
-              <Box h="40px">
+              <Box h={{ base: "15px", md: "40px" }}>
                 <Badge colorScheme="green">Beginner</Badge>
               </Box>
             </VStack>
           </Box>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
+            <Button
+              colorScheme="blue"
+              mr={{ base: 0, md: 3 }}
+              onClick={onClose}
+            >
               Close
             </Button>
           </ModalFooter>
