@@ -9,6 +9,7 @@ const LoosingScreen = ({
   setLives,
   setProfessionalLevel,
   setIntermediateLevel,
+  setHintCount,
 }) => {
   const defaultOptions = {
     loop: false,
@@ -40,6 +41,7 @@ const LoosingScreen = ({
                 setQuestionIndex(0);
                 setIntermediateLevel(false);
                 setProfessionalLevel(false);
+                setHintCount(0);
               }}
             >
               Play again

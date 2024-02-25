@@ -31,6 +31,10 @@ const Game = () => {
   const [professionalLevel, setProfessionalLevel] = useState(false);
   const isMobile = useMobileDetection();
   const [loading, setLoading] = useState(false);
+  const [hintCount, setHintCount] =  useState(() => {
+    const hintCount = JSON.parse(sessionStorage.getItem("totalHints"));
+    return hintCount !== null ? hintCount : 0;
+  });
 
   useEffect(() => {
     if (winningScreen && questionIndex === questions.length) {
@@ -45,6 +49,7 @@ const Game = () => {
     );
     const currentLives = JSON.parse(sessionStorage.getItem("currentLives"));
     const currentLevel = JSON.parse(sessionStorage.getItem("currentLevel"));
+    const totalHints = JSON.parse(sessionStorage.getItem("totalHints"));
     const intermediateLevelShown = JSON.parse(
       sessionStorage.getItem("intermediateLevelShown")
     );
@@ -56,12 +61,14 @@ const Game = () => {
     currentQuestion && setQuestionIndex(currentQuestion);
     currentLives && setLives(currentLives);
     currentLevel && setLevel(currentLevel);
+    totalHints && setHintCount(totalHints)
     showLevelUpScreen(false);
   }, []);
 
   useEffect(() => {
     JSON.stringify(sessionStorage.setItem("currentQuestion", questionIndex));
     JSON.stringify(sessionStorage.setItem("currentLives", lives));
+    JSON.stringify(sessionStorage.setItem("totalHints", hintCount));
     JSON.stringify(
       sessionStorage.setItem("intermediateLevelShown", intermediateLevel)
     );
@@ -69,7 +76,7 @@ const Game = () => {
       sessionStorage.setItem("professionalLevelShown", professionalLevel)
     );
     sessionStorage.setItem("currentLevel", JSON.stringify(level));
-  }, [questionIndex, lives, level]);
+  }, [questionIndex, lives, level, hintCount]);
 
   useEffect(() => {
     const intermediateLevelShown = JSON.parse(
@@ -138,7 +145,17 @@ const Game = () => {
   };
 
   useEffect(() => {
-    showHint &&
+    if (hintCount >= 5) {
+      toast({
+        title: "out of hints",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setHintCount(5);
+    } else if (showHint) {
+      setShowHint(true);
       toast({
         title: questions[questionIndex].hint,
         status: "info",
@@ -146,8 +163,9 @@ const Game = () => {
         isClosable: true,
         position: "bottom",
       });
-    setShowHint(false);
-  }, [showHint]);
+      setShowHint(false);
+    }
+  }, [showHint, hintCount]);
 
   const checkAnswer = (index, correct) => {
     if (index === parseInt(correct)) {
@@ -173,6 +191,7 @@ const Game = () => {
           setQuestionIndex={setQuestionIndex}
           setIntermediateLevel={setIntermediateLevel}
           setProfessionalLevel={setProfessionalLevel}
+          setHintCount={setHintCount}
         />
       );
     }
@@ -185,6 +204,7 @@ const Game = () => {
           setLives={setLives}
           setIntermediateLevel={setIntermediateLevel}
           setProfessionalLevel={setProfessionalLevel}
+          setHintCount={setHintCount}
         />
       );
     }
@@ -219,10 +239,17 @@ const Game = () => {
                 </Text>
               )}
             </Box>
-            <Box display="flex">
-              {Array.from({ length: lives }, (_, index) => (
-                <IoIosHeart size={isMobile ? 20 : 25} key={index} fill="red" />
-              ))}
+            <Box>
+              <Box display="flex">
+                {Array.from({ length: lives }, (_, index) => (
+                  <IoIosHeart
+                    size={isMobile ? 20 : 25}
+                    key={index}
+                    fill="red"
+                  />
+                ))}
+              </Box>
+              <Text fontSize={12}>Hints remaining: {5 - hintCount}</Text>
             </Box>
           </Box>
           <Question
@@ -230,6 +257,8 @@ const Game = () => {
             checkAnswer={checkAnswer}
             questionIndex={questionIndex}
             setShowHint={setShowHint}
+            setHintCount={setHintCount}
+            hintCount={hintCount}
           />
         </React.Fragment>
       );

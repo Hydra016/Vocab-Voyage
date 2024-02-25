@@ -11,7 +11,7 @@ import {
 
 import { FaLightbulb } from "react-icons/fa";
 
-const Question = ({ questions, questionIndex, checkAnswer, setShowHint }) => {
+const Question = ({ questions, questionIndex, checkAnswer, setHintCount, hintCount, setShowHint }) => {
   return (
     <SlideFade offsetY="20px" in={true}>
       <Box display="flex" justifyContent="center">
@@ -60,7 +60,10 @@ const Question = ({ questions, questionIndex, checkAnswer, setShowHint }) => {
             ))}
           </Grid>
           <Button
-            onClick={() => setShowHint(true)}
+            onClick={() => { 
+              setHintCount(hintCount + 1)
+              setShowHint(true)
+            }}
             colorScheme="yellow"
             mt={5}
             rightIcon={<FaLightbulb />}

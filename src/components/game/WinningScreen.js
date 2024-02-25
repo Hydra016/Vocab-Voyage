@@ -10,6 +10,7 @@ const WinningScreen = ({
   showLevelUpScreen,
   setProfessionalLevel,
   setIntermediateLevel,
+  setHintCount,
 }) => {
   const defaultOptions = {
     loop: false,
@@ -42,6 +43,7 @@ const WinningScreen = ({
                 showLevelUpScreen(false);
                 setIntermediateLevel(false);
                 setProfessionalLevel(false);
+                setHintCount(0);
               }}
             >
               Play again
