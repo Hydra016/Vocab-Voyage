@@ -5,7 +5,7 @@ const questionSchema = mongoose.Schema(
     title: { type: "String", required: true },
     level: {
       type: "String",
-      default: "beginner"
+      default: "beginner",
     },
     pic: {
       type: "String",
@@ -13,21 +13,22 @@ const questionSchema = mongoose.Schema(
         "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
     },
     answers: {
-        type: ["String"],
-        required: true
+      type: ["String"],
+      required: true,
     },
     correctAnswer: {
-        type: "String",
-        required: true
+      type: "String",
+      required: true,
     },
     hint: {
       type: "String",
-      required: true
-    }
+      required: true,
+    },
   },
   { timestaps: true }
 );
 
-const Question = mongoose.models.Question || mongoose.model('Question', questionSchema);
+const Question =
+  mongoose.models.Question || mongoose.model("Question", questionSchema);
 
 module.exports = Question;

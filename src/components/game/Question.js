@@ -1,5 +1,13 @@
 import React from "react";
-import { SlideFade, Heading, Box, Button, Grid, Image } from "@chakra-ui/react";
+import {
+  SlideFade,
+  Heading,
+  Box,
+  Button,
+  Grid,
+  Image,
+  Text,
+} from "@chakra-ui/react";
 
 import { FaLightbulb } from "react-icons/fa";
 
@@ -9,13 +17,13 @@ const Question = ({ questions, questionIndex, checkAnswer, setShowHint }) => {
       <Box display="flex" justifyContent="center">
         <Box>
           <Box
-            mt={!questions[questionIndex].pic && { base: 10, md: 150 }}
+            mt={!questions[questionIndex].pic && { base: 0, md: 150 }}
             display="flex"
             justifyContent="center"
           >
             {questions[questionIndex].pic && (
               <Image
-                boxSize={{ base: 200, md: 250 }}
+                boxSize={{ base: 100, md: 250 }}
                 objectFit="cover"
                 borderRadius="10px"
                 mb={5}
@@ -28,18 +36,18 @@ const Question = ({ questions, questionIndex, checkAnswer, setShowHint }) => {
               />
             )}
           </Box>
-          <Heading fontSize={{ base: 25, md: 40 }} className="capitalize">
+          <Heading fontSize={{ base: 20, md: 40 }} className="capitalize">
             {questions[questionIndex].title}
           </Heading>
           <Grid
             templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
-            gap={4}
-            mt={4}
+            gap={{ base: 2, md: 4 }}
+            mt={{ base: 2, md: 4 }}
           >
             {questions[questionIndex].answers.map((option, index) => (
               <Button
-                fontSize={{ base: 20, md: 25 }}
-                p={10}
+                fontSize={{ base: 15, md: 25 }}
+                p={{ base: 0, md: 10 }}
                 className="capitalize"
                 onClick={() =>
                   checkAnswer(index, questions[questionIndex].correctAnswer)
@@ -47,7 +55,7 @@ const Question = ({ questions, questionIndex, checkAnswer, setShowHint }) => {
                 key={index}
                 w="100%"
               >
-                {option}
+                <Text style={{ whiteSpace: "normal" }}>{option}</Text>
               </Button>
             ))}
           </Grid>

@@ -4,7 +4,13 @@ import Lottie from "react-lottie";
 import animation from "../../../public/winning";
 import { LiaRedoAltSolid } from "react-icons/lia";
 
-const WinningScreen = ({ setQuestionIndex, setLives }) => {
+const WinningScreen = ({
+  setQuestionIndex,
+  setLives,
+  showLevelUpScreen,
+  setProfessionalLevel,
+  setIntermediateLevel,
+}) => {
   const defaultOptions = {
     loop: false,
     autoplay: true,
@@ -33,6 +39,9 @@ const WinningScreen = ({ setQuestionIndex, setLives }) => {
               onClick={() => {
                 setLives(5);
                 setQuestionIndex(0);
+                showLevelUpScreen(false);
+                setIntermediateLevel(false);
+                setProfessionalLevel(false);
               }}
             >
               Play again

@@ -28,6 +28,10 @@ const Navbar = () => {
     localStorage.removeItem("userInfo");
     sessionStorage.removeItem("gameScreen");
     sessionStorage.removeItem("currentQuestion");
+    sessionStorage.removeItem("currentLives");
+    sessionStorage.removeItem("intermediateLevelShown");
+    sessionStorage.removeItem("professionalLevelShown");
+    sessionStorage.removeItem("currentLevel");
     router.push("/");
   };
 

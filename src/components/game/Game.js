@@ -5,6 +5,8 @@ import Question from "./Question";
 import { IoIosHeart } from "react-icons/io";
 import WinningScreen from "./WinningScreen";
 import LoosingScreen from "./LoosingScreen";
+import LevelUpScreen from "./LevelUpScreen";
+import { useMobileDetection } from "@/hooks/useMobileDetection";
 
 const Game = () => {
   const [questions, setQuestions] = useState([]);
@@ -17,6 +19,16 @@ const Game = () => {
   const [showHint, setShowHint] = useState(false);
   const [winningScreen, setWinningScreen] = useState(false);
   const [level, setLevel] = useState("beginner");
+  const [levelUpScreen, showLevelUpScreen] = useState(false);
+  const [intermediateLevel, setIntermediateLevel] = useState(false);
+  const [professionalLevel, setProfessionalLevel] = useState(false);
+  const isMobile = useMobileDetection();
+
+  useEffect(() => {
+    if (winningScreen && questionIndex === questions.length) {
+      setLevel("");
+    }
+  }, [questionIndex]);
 
   useEffect(() => {
     fetchQuestions();
@@ -24,14 +36,59 @@ const Game = () => {
       sessionStorage.getItem("currentQuestion")
     );
     const currentLives = JSON.parse(sessionStorage.getItem("currentLives"));
+    const currentLevel = JSON.parse(sessionStorage.getItem("currentLevel"));
+    const intermediateLevelShown = JSON.parse(
+      sessionStorage.getItem("intermediateLevelShown")
+    );
+    intermediateLevelShown && setIntermediateLevel(intermediateLevelShown);
+    const professionalLevelShown = JSON.parse(
+      sessionStorage.getItem("professionalLevelShown")
+    );
+    professionalLevelShown && setProfessionalLevel(professionalLevelShown);
     currentQuestion && setQuestionIndex(currentQuestion);
     currentLives && setLives(currentLives);
+    currentLevel && setLevel(currentLevel);
+    showLevelUpScreen(false);
   }, []);
 
   useEffect(() => {
     JSON.stringify(sessionStorage.setItem("currentQuestion", questionIndex));
     JSON.stringify(sessionStorage.setItem("currentLives", lives));
-  }, [questionIndex, lives]);
+    JSON.stringify(
+      sessionStorage.setItem("intermediateLevelShown", intermediateLevel)
+    );
+    JSON.stringify(
+      sessionStorage.setItem("professionalLevelShown", professionalLevel)
+    );
+    sessionStorage.setItem("currentLevel", JSON.stringify(level));
+  }, [questionIndex, lives, level]);
+
+  useEffect(() => {
+    const intermediateLevelShown = JSON.parse(
+      sessionStorage.getItem("intermediateLevelShown")
+    );
+    const professionalLevelShown = JSON.parse(
+      sessionStorage.getItem("professionalLevelShown")
+    );
+    if (level !== "beginner") {
+      showLevelUpScreen(true);
+    }
+
+    if (professionalLevelShown && level === "professional") {
+      showLevelUpScreen(false);
+    }
+
+    if (intermediateLevelShown && level === "intermediate") {
+      showLevelUpScreen(false);
+    }
+
+    if (level === "intermediate") {
+      setIntermediateLevel(true);
+    }
+    if (level === "professional") {
+      setProfessionalLevel(true);
+    }
+  }, [level]);
 
   useEffect(() => {
     if (questions.length > 0 && questionIndex >= questions.length - 1) {
@@ -103,6 +160,8 @@ const Game = () => {
         <LoosingScreen
           setLives={setLives}
           setQuestionIndex={setQuestionIndex}
+          setIntermediateLevel={setIntermediateLevel}
+          setProfessionalLevel={setProfessionalLevel}
         />
       );
     }
@@ -110,8 +169,22 @@ const Game = () => {
     if (questions.length > 0 && questionIndex === questions.length) {
       return (
         <WinningScreen
+          showLevelUpScreen={showLevelUpScreen}
           setQuestionIndex={setQuestionIndex}
           setLives={setLives}
+          setIntermediateLevel={setIntermediateLevel}
+          setProfessionalLevel={setProfessionalLevel}
+        />
+      );
+    }
+
+    if (questions.length > 0 && levelUpScreen) {
+      return (
+        <LevelUpScreen
+          showLevelUpScreen={showLevelUpScreen}
+          level={level}
+          intermediateLevel={intermediateLevel}
+          professionalLevel={professionalLevel}
         />
       );
     }
@@ -123,19 +196,21 @@ const Game = () => {
             display="flex"
             justifyContent="space-between"
             alignItems="center"
-            mb={10}
+            mb={{ base: 5, md: 10 }}
           >
             <Box>
               <Heading fontSize={{ base: 25, md: 40 }}>
                 Question {questionIndex + 1}
               </Heading>
-              <Text fontSize={{ base: 15, md: 20 }} className="capitalize">
-                Difficulty: {questions[questionIndex].level}
-              </Text>
+              {!isMobile && (
+                <Text fontSize={{ base: 15, md: 20 }} className="capitalize">
+                  Difficulty: {questions[questionIndex].level}
+                </Text>
+              )}
             </Box>
             <Box display="flex">
               {Array.from({ length: lives }, (_, index) => (
-                <IoIosHeart size={25} key={index} fill="red" />
+                <IoIosHeart size={isMobile ? 20 : 25} key={index} fill="red" />
               ))}
             </Box>
           </Box>
@@ -153,8 +228,17 @@ const Game = () => {
   return (
     <SlideFade offsetY="20px" in={true}>
       <Box
-        p={5}
-        className={`game-container ${lives === 0 ? "lost" : "normal"}`}
+        px={{ base: 5, md: 100 }}
+        py={5}
+        className={`game-container ${
+          lives === 0
+            ? "lost"
+            : level === "intermediate"
+            ? "intermediate"
+            : level === "professional"
+            ? "professional"
+            : "normal"
+        }`}
         width="100%"
         height="100vh"
         backgroundColor="#FAF9F6"
