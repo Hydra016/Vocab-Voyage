@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext } from "react";
 import {
   Box,
   Tooltip,
@@ -12,7 +12,6 @@ import {
   MenuDivider,
 } from "@chakra-ui/react";
 import { FaChevronDown } from "react-icons/fa";
-import { useContext } from "react";
 import { QuestionContext } from "@/context/QuestionProvider";
 import ProfileModal from "./Profile";
 import { useRouter } from "next/router";
@@ -20,7 +19,7 @@ import { FiMenu } from "react-icons/fi";
 import { useMobileDetection } from "@/hooks/useMobileDetection";
 
 const Navbar = () => {
-  const { user } = useContext(QuestionContext);
+  const { user, showGameScreen, showMultiplayerGameScreen } = useContext(QuestionContext);
   const isMobile = useMobileDetection();
   const router = useRouter();
 
@@ -36,6 +35,13 @@ const Navbar = () => {
     sessionStorage.removeItem("totalHints");
     router.push("/");
   };
+
+  const hideGameScreen = () => {
+    JSON.stringify(sessionStorage.setItem("gameScreen", false));
+    JSON.stringify(sessionStorage.setItem("multiplayerGameScreen", false));
+    showGameScreen(false)
+    showMultiplayerGameScreen(false)
+  }
 
   return (
     <Box
@@ -102,6 +108,10 @@ const Navbar = () => {
               </ProfileModal>
             )}
             <MenuDivider />
+            <MenuItem onClick={hideGameScreen}>
+                  Home
+                </MenuItem>
+                <MenuDivider />
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </MenuList>
         </Menu>

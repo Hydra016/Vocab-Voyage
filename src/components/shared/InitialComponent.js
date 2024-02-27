@@ -12,7 +12,7 @@ import axios from "axios";
 
 import { QuestionContext } from "@/context/QuestionProvider";
 
-const InitialComponent = ({ gameScreen, showGameScreen }) => {
+const InitialComponent = ({ showMultiplayerGameScreen, showGameScreen }) => {
   const [introPlayed, setIntroPlayed] = useState(false);
   const [newGame, setNewGame] = useState(false);
   const { user, setUser } = useContext(QuestionContext);
@@ -50,9 +50,15 @@ const InitialComponent = ({ gameScreen, showGameScreen }) => {
     }
   };
 
-  const setGameScreen = () => {
-    showGameScreen(true);
-    JSON.stringify(sessionStorage.setItem("gameScreen", true));
+  const setGameScreen = (gameScreen) => {
+    
+    if(gameScreen === "single") {
+      showGameScreen(true);
+      JSON.stringify(sessionStorage.setItem("gameScreen", true));
+    } else {
+      showMultiplayerGameScreen(true);
+      JSON.stringify(sessionStorage.setItem("multiplayerGameScreen", true));
+    }
   };
 
   return (
@@ -92,22 +98,31 @@ const InitialComponent = ({ gameScreen, showGameScreen }) => {
               flexDirection="column"
               justifyContent="center"
               alignItems="center"
-              mt={100}
+              mt={{ base: 50, md: 100 }}
             >
               <Heading fontSize={{ base: 40 }} mb={10} as="h1">
                 Vocab Voyage <span style={{ fontSize: "10px" }}>V1.0</span>
               </Heading>
               <Heading fontSize={{ base: 20, md: 25 }} mb={3}>High Score: {user.HighScore}</Heading>
-              <Box>
+              <Box display="flex" flexDirection="column">
                 <Button
-                  onClick={() => setGameScreen()}
+                  onClick={() => setGameScreen("single")}
                   px={20}
                   py={8}
-                  mr={5}
                   fontSize={25}
+                  mb={3}
                   colorScheme="blue"
                 >
                   Single Player
+                </Button>
+                <Button
+                  onClick={() => setGameScreen("multi")}
+                  px={20}
+                  py={8}
+                  fontSize={25}
+                  colorScheme="blue"
+                >
+                  Multi Player
                 </Button>
               </Box>
             </Box>

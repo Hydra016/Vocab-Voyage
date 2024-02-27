@@ -7,6 +7,8 @@ export const QuestionContext = createContext();
 const QuestionProvider = ({ children }) => {
     const [user, setUser] = useState();
     const [theme, setTheme] = useState('light')
+    const [gameScreen, showGameScreen] = useState(false);
+    const [multiplayerGameScreen, showMultiplayerGameScreen] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
 
@@ -19,12 +21,14 @@ const QuestionProvider = ({ children }) => {
             router.push("/game/Admin")
         } else if(pathname === "/game/Questions") {
             router.push("/game/Questions")
+        } else if(pathname === "/game/Multiplayer") {
+            router.push("/game/Multiplayer")
         } else {
             router.push("/game")
         }
     }, [pathname])
 
-    return <QuestionContext.Provider value={{user, setUser, theme, setTheme}}>{children}</QuestionContext.Provider>
+    return <QuestionContext.Provider value={{user, setUser, theme, setTheme, gameScreen, showGameScreen, multiplayerGameScreen, showMultiplayerGameScreen}}>{children}</QuestionContext.Provider>
 }
 
 export default QuestionProvider;

@@ -1,16 +1,20 @@
 import Navbar from "@/components/shared/Navbar";
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Container, SlideFade } from "@chakra-ui/react";
 import InitialComponent from "@/components/shared/InitialComponent";
 import Game from "@/components/game/Game";
+import { QuestionContext } from "@/context/QuestionProvider";
+import MutiplayerGame from "@/components/game/MutiplayerGame";
 
 const index = () => {
-  const [gameScreen, showGameScreen] = useState(false);
+  const { gameScreen, showGameScreen, multiplayerGameScreen, showMultiplayerGameScreen } = useContext(QuestionContext);
 
   useEffect(() => {
     const checkGame = JSON.parse(sessionStorage.getItem("gameScreen"));
+    const checkMultiplayerGame = JSON.parse(sessionStorage.getItem("multiplayerGameScreen"));
     showGameScreen(checkGame);
-  }, []);
+    showMultiplayerGameScreen(checkMultiplayerGame)
+  }, [gameScreen, multiplayerGameScreen]);
 
   return (
     <SlideFade offsetY="20px" in={true}>
@@ -22,14 +26,13 @@ const index = () => {
         p={5}
       >
         <Navbar />
-        {!gameScreen ? (
+        {!gameScreen && !multiplayerGameScreen ? (
           <InitialComponent
             gameScreen={gameScreen}
             showGameScreen={showGameScreen}
+            showMultiplayerGameScreen={showMultiplayerGameScreen}
           />
-        ) : (
-          <Game />
-        )}
+        ) : gameScreen && !multiplayerGameScreen ? <Game /> : <MutiplayerGame />}
       </Container>
     </SlideFade>
   );
