@@ -97,6 +97,7 @@ const InitialComponent = ({ gameScreen, showGameScreen }) => {
               <Heading fontSize={{ base: 40 }} mb={10} as="h1">
                 Vocab Voyage <span style={{ fontSize: "10px" }}>V1.0</span>
               </Heading>
+              <Heading fontSize={{ base: 20, md: 25 }} mb={3}>High Score: {user.HighScore}</Heading>
               <Box>
                 <Button
                   onClick={() => setGameScreen()}

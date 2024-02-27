@@ -28,6 +28,7 @@ export default async function signup(req, res) {
         password: newPass,
         pic,
         isOnBoarded: false,
+        HighScore: 0
       });
 
       if (user) {
@@ -38,6 +39,7 @@ export default async function signup(req, res) {
           pic: user.pic,
           token: generateToken(user._id),
           isOnBoarded: false,
+          HighScore: 0
         });
       } else {
         res.status(400).json({ error: "Failed to create user" });

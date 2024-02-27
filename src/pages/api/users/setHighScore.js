@@ -1,10 +1,10 @@
 require("../config/DabaseConnection");
 const User = require("../models/User");
 
-export default async function onboarding(req, res) {
+export default async function setHighScore(req, res) {
   if (req.method === "PUT") {
     try {
-      const { userId, isOnBoarded } = req.body;
+      const { userId, highScore } = req.body;
       const user = await User.findById(userId);
       if (!user) {
         res.status(404).send("User not found");
@@ -14,7 +14,7 @@ export default async function onboarding(req, res) {
       const newUser = await User.findByIdAndUpdate(
         userId,
         {
-          isOnBoarded: isOnBoarded,
+          HighScore: highScore,
         },
         { new: true }
       );

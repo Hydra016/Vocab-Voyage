@@ -22,7 +22,8 @@ export default async function login(req, res) {
           pic: user.pic,
           token: generateToken(user._id),
           isAdmin: user.isAdmin,
-          isOnBoarded: user.isOnBoarded
+          isOnBoarded: user.isOnBoarded,
+          HighScore: user.HighScore
         });
       } else {
         res.status(401).json({ error: "Invalid username or password" });

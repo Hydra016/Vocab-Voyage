@@ -60,6 +60,7 @@ const Login = () => {
         isClosable: true,
         position: "bottom",
       });
+      console.log(data)
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
       router.push('/game')

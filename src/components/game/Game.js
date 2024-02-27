@@ -39,7 +39,6 @@ const Game = () => {
     const scoreCount = JSON.parse(sessionStorage.getItem("score"));
     return scoreCount !== null ? scoreCount : 0;
   });
-
   useEffect(() => {
     if (winningScreen && questionIndex === questions.length) {
       setLevel("");
@@ -201,6 +200,7 @@ const Game = () => {
           setProfessionalLevel={setProfessionalLevel}
           setHintCount={setHintCount}
           setScore={setScore}
+          score={score}
         />
       );
     }
@@ -215,6 +215,7 @@ const Game = () => {
           setProfessionalLevel={setProfessionalLevel}
           setHintCount={setHintCount}
           setScore={setScore}
+          score={score}
         />
       );
     }

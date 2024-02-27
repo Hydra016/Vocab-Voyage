@@ -18,6 +18,10 @@ const userSchema = mongoose.Schema(
     isOnBoarded: {
       type: Boolean,
       default: false
+    },
+    HighScore: {
+      type: Number,
+      default: 0
     }
   },
   { timestaps: true }
