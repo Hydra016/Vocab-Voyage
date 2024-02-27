@@ -44,6 +44,7 @@ const WinningScreen = ({
                 setIntermediateLevel(false);
                 setProfessionalLevel(false);
                 setHintCount(0);
+                setScore(0);
               }}
             >
               Play again

@@ -32,6 +32,8 @@ const Navbar = () => {
     sessionStorage.removeItem("intermediateLevelShown");
     sessionStorage.removeItem("professionalLevelShown");
     sessionStorage.removeItem("currentLevel");
+    sessionStorage.removeItem("score");
+    sessionStorage.removeItem("totalHints");
     router.push("/");
   };
 

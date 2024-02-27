@@ -31,9 +31,13 @@ const Game = () => {
   const [professionalLevel, setProfessionalLevel] = useState(false);
   const isMobile = useMobileDetection();
   const [loading, setLoading] = useState(false);
-  const [hintCount, setHintCount] =  useState(() => {
+  const [hintCount, setHintCount] = useState(() => {
     const hintCount = JSON.parse(sessionStorage.getItem("totalHints"));
     return hintCount !== null ? hintCount : 0;
+  });
+  const [score, setScore] = useState(() => {
+    const scoreCount = JSON.parse(sessionStorage.getItem("score"));
+    return scoreCount !== null ? scoreCount : 0;
   });
 
   useEffect(() => {
@@ -47,9 +51,7 @@ const Game = () => {
     const currentQuestion = JSON.parse(
       sessionStorage.getItem("currentQuestion")
     );
-    const currentLives = JSON.parse(sessionStorage.getItem("currentLives"));
     const currentLevel = JSON.parse(sessionStorage.getItem("currentLevel"));
-    const totalHints = JSON.parse(sessionStorage.getItem("totalHints"));
     const intermediateLevelShown = JSON.parse(
       sessionStorage.getItem("intermediateLevelShown")
     );
@@ -59,9 +61,7 @@ const Game = () => {
     );
     professionalLevelShown && setProfessionalLevel(professionalLevelShown);
     currentQuestion && setQuestionIndex(currentQuestion);
-    currentLives && setLives(currentLives);
     currentLevel && setLevel(currentLevel);
-    totalHints && setHintCount(totalHints)
     showLevelUpScreen(false);
   }, []);
 
@@ -69,6 +69,7 @@ const Game = () => {
     JSON.stringify(sessionStorage.setItem("currentQuestion", questionIndex));
     JSON.stringify(sessionStorage.setItem("currentLives", lives));
     JSON.stringify(sessionStorage.setItem("totalHints", hintCount));
+    JSON.stringify(sessionStorage.setItem("score", score));
     JSON.stringify(
       sessionStorage.setItem("intermediateLevelShown", intermediateLevel)
     );
@@ -76,7 +77,7 @@ const Game = () => {
       sessionStorage.setItem("professionalLevelShown", professionalLevel)
     );
     sessionStorage.setItem("currentLevel", JSON.stringify(level));
-  }, [questionIndex, lives, level, hintCount]);
+  }, [questionIndex, lives, level, hintCount, score]);
 
   useEffect(() => {
     const intermediateLevelShown = JSON.parse(
@@ -170,6 +171,7 @@ const Game = () => {
   const checkAnswer = (index, correct) => {
     if (index === parseInt(correct)) {
       setQuestionIndex(questionIndex + 1);
+      setScore(score + 10);
     }
     if (index !== parseInt(correct)) {
       setLives(lives - 1);
@@ -180,6 +182,12 @@ const Game = () => {
         isClosable: true,
         position: "bottom",
       });
+
+      if (score !== 0) {
+        setScore(score - 10);
+      } else {
+        setScore(0);
+      }
     }
   };
 
@@ -192,6 +200,7 @@ const Game = () => {
           setIntermediateLevel={setIntermediateLevel}
           setProfessionalLevel={setProfessionalLevel}
           setHintCount={setHintCount}
+          setScore={setScore}
         />
       );
     }
@@ -205,6 +214,7 @@ const Game = () => {
           setIntermediateLevel={setIntermediateLevel}
           setProfessionalLevel={setProfessionalLevel}
           setHintCount={setHintCount}
+          setScore={setScore}
         />
       );
     }
@@ -230,7 +240,7 @@ const Game = () => {
             mb={{ base: 5, md: 10 }}
           >
             <Box>
-              <Heading fontSize={{ base: 25, md: 40 }}>
+              <Heading fontSize={{ base: 15, md: 40 }}>
                 Question {questionIndex + 1}
               </Heading>
               {!isMobile && (
@@ -239,11 +249,12 @@ const Game = () => {
                 </Text>
               )}
             </Box>
+            <Heading fontSize={{ base: 15, md: 30 }}>Score: {score}</Heading>
             <Box>
               <Box display="flex">
                 {Array.from({ length: lives }, (_, index) => (
                   <IoIosHeart
-                    size={isMobile ? 20 : 25}
+                    size={isMobile ? 15 : 25}
                     key={index}
                     fill="red"
                   />
