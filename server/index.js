@@ -17,30 +17,73 @@ const PORT = process.env.PORT || 5000;
 
 const server = app.listen(PORT, () => `server running on port ${PORT}`);
 
-const io = require('socket.io')(server, {
+const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
-    origin: 'http://localhost:3000',
-  }
+    origin: "http://localhost:3000",
+  },
 });
 
 io.on("connection", (socket) => {
-  socket.on("setup", (userData) => {
-    console.log(userData._id);
-    socket.join(userData._id);
-    socket.emit("connected");
+  socket.emit("connection");
+  socket.on("create room", (userData) => {
+    const roomId = userData._id.toString();
+
+    if (!io.sockets.adapter.rooms.has(roomId)) {
+      socket.join(roomId);
+      socket.emit("room created", true);
+    } else {
+      console.log(`Room ${roomId} already exists`);
+    }
   });
 
   socket.on("join game", (data) => {
-    socket.join(data.roomId);
-    console.log("User Joined Room: " + data.roomId);
+  const roomId = data.roomId;
+  if (io.sockets.adapter.rooms.has(roomId)) {
+    socket.join(roomId);
+    const numUsers = io.sockets.adapter.rooms.get(roomId).size;
+    console.log("User Joined Room: " + roomId);
+    console.log(`Number of users in room ${roomId}: ${numUsers}`);
 
-    // Get the number of users in the room
-    const room = io.sockets.adapter.rooms.get(data.roomId);
-    const numUsers = room ? room.size : 0;
+    io.to(roomId).emit("new user joined", { users: { host: roomId, guest: data.user._id }});
+  } else {
+    socket.emit("room does not exist");
+  }
+});
 
-    console.log(`Number of users in room ${data.roomId}: ${numUsers}`);
+  socket.on("remove room", (data) => {
+    const roomId = data._id;
 
-    socket.in(data.roomId).emit("new user joined", { user: data.user });
+    if (io.sockets.adapter.rooms.has(roomId)) {
+      const socketsInRoom = io.sockets.adapter.rooms.get(roomId);
+
+      if (socketsInRoom && socketsInRoom.size > 0) {
+        for (const socketId of socketsInRoom) {
+          const socketToDisconnect = io.sockets.sockets[socketId];
+
+          if (socketToDisconnect) {
+            socketToDisconnect.disconnect(true);
+          }
+        }
+      }
+
+      io.sockets.adapter.rooms.delete(roomId);
+
+      socket.emit("room disconnected", false);
+
+      console.log(`Room ${roomId} removed`);
+    } else {
+      socket.emit("room disconnected", { success: false });
+      console.log(`Room ${roomId} does not exist`);
+    }
+  });
+
+ 
+  socket.on("disconnect", () => {
+    console.log("User disconnected");
+  });
+  
+  socket.on("disconnected user", (user) => {
+    console.log(user);
   });
 });

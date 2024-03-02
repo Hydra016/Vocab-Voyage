@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { usePathname } from 'next/navigation'
+import io from "socket.io-client";
 
 export const QuestionContext = createContext();
 
@@ -9,8 +10,19 @@ const QuestionProvider = ({ children }) => {
     const [theme, setTheme] = useState('light')
     const [gameScreen, showGameScreen] = useState(false);
     const [multiplayerGameScreen, showMultiplayerGameScreen] = useState(false);
+    const [socketConnected, setSocketConnected] = useState(false);
+    const [roomCreated, setRoomCreated] = useState(false);
+    const [room, setRoom] = useState();
     const router = useRouter();
     const pathname = usePathname();
+
+    useEffect(() => {
+        const socket = io("http://localhost:5000");
+        socket.on("connection", () => {
+          setSocketConnected(true)
+        })
+    }, [])
+     
 
     useEffect(() => {
         const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -28,7 +40,7 @@ const QuestionProvider = ({ children }) => {
         }
     }, [pathname])
 
-    return <QuestionContext.Provider value={{user, setUser, theme, setTheme, gameScreen, showGameScreen, multiplayerGameScreen, showMultiplayerGameScreen}}>{children}</QuestionContext.Provider>
+    return <QuestionContext.Provider value={{ roomCreated, setRoomCreated, socketConnected, user, setUser, theme, setTheme, gameScreen, showGameScreen, multiplayerGameScreen, showMultiplayerGameScreen, room, setRoom}}>{children}</QuestionContext.Provider>
 }
 
 export default QuestionProvider;

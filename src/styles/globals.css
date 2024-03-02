@@ -8,6 +8,7 @@
 .game-container {
   border-radius: 10px;
   box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  height: 100%;
 }
 
 .intermediate {
@@ -47,4 +48,10 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
+}
+
+.multiplayer-box {
+  background-color: #FFF;
+  border-radius: 10px;
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
 }

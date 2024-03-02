@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import {
   VStack,
@@ -12,8 +12,10 @@ import {
 } from "@chakra-ui/react";
 import useImageUploader from "@/hooks/useImageUploader";
 import { useRouter } from "next/router";
+import { QuestionContext } from "@/context/QuestionProvider";
 
 const Signup = () => {
+  const { showMultiplayerGameScreen, showGameScreen } = useContext(QuestionContext);
   const [name, setName] = useState("");
   const [username, setusername] = useState("");
   const [password, setPassword] = useState("");
@@ -79,6 +81,8 @@ const Signup = () => {
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
+      showGameScreen(false);
+      showMultiplayerGameScreen(false);
       router.push("/game");
     } catch (error) {
       toast({

@@ -33,6 +33,7 @@ const Navbar = () => {
     sessionStorage.removeItem("currentLevel");
     sessionStorage.removeItem("score");
     sessionStorage.removeItem("totalHints");
+    sessionStorage.removeItem("multiplayerGameScreen");
     router.push("/");
   };
 
